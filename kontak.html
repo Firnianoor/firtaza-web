@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungi Kami | Firtaza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { beige: '#F4F0EA', gray: '#E8E8E8', rose: '#D2BBA0', dark: '#4A423D', light: '#FAFAFA' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-light text-brand-dark antialiased flex flex-col min-h-screen">
+
+    <div id="shared-header"></div>
+
+    <main class="flex-grow pt-28 pb-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <span class="uppercase tracking-widest text-xs font-semibold text-brand-rose block mb-2">Get in Touch</span>
+                <h1 class="text-3xl sm:text-4xl font-serif text-brand-dark mb-4">Hubungi Tim Firtaza</h1>
+                <div class="w-12 h-0.5 bg-brand-rose/50 mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10">
+                <!-- Info Kontak -->
+                <div class="md:col-span-5 bg-brand-beige p-8 rounded-2xl space-y-6">
+                    <h2 class="font-serif text-2xl text-brand-dark">Informasi Layanan</h2>
+                    <p class="text-xs text-gray-500 font-light leading-relaxed">
+                        Punya pertanyaan seputar stok produk, kemitraan reseller, atau pengiriman area Makassar? Hubungi kami melalui kanal berikut:
+                    </p>
+                    <div class="space-y-4 text-sm font-light text-brand-dark" id="contact-details"></div>
+                </div>
+
+                <!-- Form Kirim Pesan ke WA -->
+                <div class="md:col-span-7 bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+                    <h2 class="font-serif text-2xl text-brand-dark mb-6">Kirim Pesan Cepat</h2>
+                    <form onsubmit="sendContactWA(event)" class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-600 block mb-1">Nama Anda</label>
+                            <input type="text" id="contact-name" required placeholder="Masukkan nama Anda" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-rose">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-600 block mb-1">Topik Pertanyaan</label>
+                            <select id="contact-topic" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-rose bg-white">
+                                <option value="Tanya Ketersediaan Stok Produk">Tanya Ketersediaan Stok Produk</option>
+                                <option value="Konfirmasi Pengiriman Pesanan">Konfirmasi Pengiriman Pesanan</option>
+                                <option value="Info Pre-Order Lunara Paris">Info Pre-Order Lunara Paris</option>
+                                <option value="Kerjasama / Lainnya">Kerjasama / Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-600 block mb-1">Pesan</label>
+                            <textarea id="contact-msg" rows="4" required placeholder="Tuliskan pertanyaan Anda..." class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-rose"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-brand-dark hover:bg-[#322d29] text-white py-3.5 rounded-full text-xs uppercase tracking-widest font-semibold transition-all">
+                            Kirim Pesan via WhatsApp
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="shared-footer"></div>
+
+    <script src="app.js"></script>
+    <script>
+        initSharedLayout("kontak");
+
+        document.getElementById("contact-details").innerHTML = `
+            <div><strong class="block text-xs uppercase tracking-wider text-brand-rose">Lokasi</strong>${FIRTAZA_CONFIG.address}</div>
+            <div><strong class="block text-xs uppercase tracking-wider text-brand-rose">WhatsApp Admin</strong>+${FIRTAZA_CONFIG.whatsappNumber}</div>
+            <div><strong class="block text-xs uppercase tracking-wider text-brand-rose">Jam Operasional</strong>${FIRTAZA_CONFIG.operationalHours}</div>
+        `;
+
+        function sendContactWA(e) {
+            e.preventDefault();
+            const name = document.getElementById("contact-name").value;
+            const topic = document.getElementById("contact-topic").value;
+            const msg = document.getElementById("contact-msg").value;
+            const text = `Halo Admin Firtaza, saya *${name}* ingin bertanya mengenai *${topic}*:\n\n${msg}`;
+            window.open(`https://wa.me/${FIRTAZA_CONFIG.whatsappNumber}?text=${encodeURIComponent(text)}`, "_blank");
+        }
+    </script>
+</body>
+</html>

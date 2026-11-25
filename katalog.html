@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk | Firtaza</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { beige: '#F4F0EA', gray: '#E8E8E8', rose: '#D2BBA0', dark: '#4A423D', light: '#FAFAFA' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-light text-brand-dark antialiased flex flex-col min-h-screen">
+
+    <div id="shared-header"></div>
+
+    <main class="flex-grow pt-28 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header Katalog -->
+            <div class="text-center mb-12">
+                <span class="uppercase tracking-widest text-xs font-semibold text-brand-rose mb-2 block">Firtaza Catalogue</span>
+                <h1 class="text-3xl sm:text-4xl font-serif text-brand-dark mb-4">Koleksi Modest Terbaik</h1>
+                <div class="w-12 h-0.5 bg-brand-rose/50 mx-auto mb-4"></div>
+                <p class="text-gray-500 font-light max-w-xl mx-auto text-sm">Dirancang secara perlahan dengan tujuan yang jelas untuk menemani setiap langkah Anda.</p>
+            </div>
+
+            <!-- Filter Minimalis Elegan -->
+            <div class="flex flex-wrap justify-center gap-3 mb-14">
+                <button onclick="filterCatalog('Semua')" id="btn-Semua" class="filter-btn px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium bg-brand-dark text-white transition-all">
+                    Semua Koleksi
+                </button>
+                <button onclick="filterCatalog('Hijab')" id="btn-Hijab" class="filter-btn px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium bg-white border border-gray-200 text-brand-dark hover:border-brand-rose transition-all">
+                    Hijab
+                </button>
+                <button onclick="filterCatalog('Inner')" id="btn-Inner" class="filter-btn px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium bg-white border border-gray-200 text-brand-dark hover:border-brand-rose transition-all">
+                    Ciput & Inner
+                </button>
+            </div>
+
+            <!-- Grid Produk -->
+            <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+        </div>
+    </main>
+
+    <div id="shared-footer"></div>
+
+    <script src="app.js"></script>
+    <script>
+        initSharedLayout("katalog");
+
+        function filterCatalog(category) {
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.className = "filter-btn px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium bg-white border border-gray-200 text-brand-dark hover:border-brand-rose transition-all";
+            });
+            const activeBtn = document.getElementById(`btn-${category}`);
+            if (activeBtn) {
+                activeBtn.className = "filter-btn px-6 py-2 rounded-full text-xs uppercase tracking-widest font-medium bg-brand-dark text-white transition-all";
+            }
+
+            const filtered = category === "Semua" ? PRODUCTS : PRODUCTS.filter(p => p.category === category);
+            const grid = document.getElementById("catalog-grid");
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                    <div class="relative bg-[#f8f6f3] p-4 overflow-hidden">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-72 object-cover rounded-xl ${p.available ? 'group-hover:scale-105' : 'opacity-60 grayscale'} transition-transform duration-500">
+                        <span class="absolute top-6 left-6 ${p.available ? 'bg-white/95 text-brand-dark' : 'bg-gray-700 text-white'} px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
+                            ${p.badge}
+                        </span>
+                    </div>
+                    <div class="p-6 text-center flex flex-col flex-grow">
+                        <span class="text-[10px] uppercase tracking-widest text-brand-rose font-semibold mb-1">${p.category}</span>
+                        <h3 class="text-xl font-serif text-brand-dark mb-1">${p.name}</h3>
+                        <p class="text-xs text-gray-400 font-light mb-3">${p.color}</p>
+                        <p class="text-xs text-gray-500 font-light leading-relaxed mb-5">${p.desc}</p>
+                        <p class="text-lg font-medium text-brand-dark mb-5 mt-auto">${formatter.format(p.price)}</p>
+                        ${p.available ? `
+                            <button onclick="addToCart('${p.id}')" class="w-full border border-brand-rose text-brand-dark py-2.5 rounded-full hover:bg-brand-rose hover:text-white transition-all text-xs font-semibold uppercase tracking-widest">
+                                Tambah ke Keranjang
+                            </button>
+                        ` : `
+                            <button disabled class="w-full bg-gray-100 text-gray-400 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest cursor-not-allowed">
+                                Sedang Diproduksi
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        filterCatalog("Semua");
+    </script>
+</body>
+</html>
