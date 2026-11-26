@@ -19,6 +19,37 @@
             }
         }
     </script>
+    <style>
+        /* Animasi Nomor 1: Fade-Up Bertahap */
+        @keyframes fadeUpIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-animate {
+            opacity: 0;
+            animation: fadeUpIn 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.25s; }
+        .delay-3 { animation-delay: 0.4s; }
+        .delay-4 { animation-delay: 0.55s; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hero-animate {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
 </head>
 <body class="bg-brand-light text-brand-dark antialiased flex flex-col min-h-screen">
 
@@ -30,25 +61,25 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-28">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div>
-                        <span class="uppercase tracking-[0.2em] text-xs font-bold text-brand-rose mb-4 block">Koleksi Pilihan 2026</span>
-                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif text-brand-dark mb-6 leading-tight">
+                        <span class="hero-animate delay-1 uppercase tracking-[0.2em] text-xs font-bold text-brand-rose mb-4 block">Koleksi Pilihan 2026</span>
+                        <h1 class="hero-animate delay-2 text-4xl sm:text-5xl md:text-6xl font-serif text-brand-dark mb-6 leading-tight">
                             Keanggunan dalam <br><span class="text-brand-rose italic">Setiap Helai</span>
                         </h1>
-                        <div class="w-16 h-0.5 bg-brand-rose/50 mb-6"></div>
-                        <p class="text-base sm:text-lg text-gray-500 font-light leading-relaxed mb-10 max-w-xl">
+                        <div class="hero-animate delay-2 w-16 h-0.5 bg-brand-rose/50 mb-6"></div>
+                        <p class="hero-animate delay-3 text-base sm:text-lg text-gray-500 font-light leading-relaxed mb-10 max-w-xl">
                             Firtaza menghadirkan koleksi hijab premium dan ciput berkualitas. Dirancang untuk kenyamanan aktivitas harian Anda, dari kampus hingga kantor, dengan sentuhan elegan khas Makassar.
                         </p>
-                        <div class="flex flex-wrap gap-4">
-                            <a href="katalog.html" class="px-8 py-3.5 rounded-full text-sm font-medium text-white bg-brand-dark hover:bg-[#322d29] transition-all shadow-lg shadow-brand-dark/10">
+                        <div class="hero-animate delay-4 flex flex-wrap gap-4">
+                            <a href="katalog.html" class="px-8 py-3.5 rounded-full text-sm font-medium text-white bg-brand-dark hover:bg-[#322d29] transition-colors shadow-lg shadow-brand-dark/10">
                                 Belanja Sekarang
                             </a>
-                            <a href="about.html" class="px-8 py-3.5 rounded-full text-sm font-medium text-brand-dark border border-brand-dark hover:bg-brand-dark hover:text-white transition-all">
+                            <a href="about.html" class="px-8 py-3.5 rounded-full text-sm font-medium text-brand-dark border border-brand-dark hover:bg-brand-dark hover:text-white transition-colors">
                                 Kisah Firtaza
                             </a>
                         </div>
                     </div>
-                    <div class="relative">
-                        <!-- GANTI FOTO HERO -->
+
+                    <div class="hero-animate delay-3">
                         <img src="images/hero1.JPG" alt="Firtaza Modest Fashion" class="w-full h-[380px] sm:h-[460px] object-cover rounded-3xl shadow-xl">
                     </div>
                 </div>
@@ -64,9 +95,9 @@
                     <p class="text-xs text-gray-500 font-light leading-relaxed">Bahan adem, ringan, dan menyerap keringat untuk kenyamanan sepanjang hari.</p>
                 </div>
                 <div class="p-6">
-                    <i class="fas fa-sparkles text-2xl text-brand-rose mb-3"></i>
-                    <h3 class="font-serif text-lg mb-2">Warna Earth Tone Elegan</h3>
-                    <p class="text-xs text-gray-500 font-light leading-relaxed">Palet warna lembut yang mudah dipadukan dengan berbagai outfit harian.</p>
+                    <i class="fas fa-palette text-2xl text-brand-rose mb-3"></i>
+                    <h3 class="font-serif text-lg mb-2">Warna Lembut Elegan</h3>
+                    <p class="text-xs text-gray-500 font-light leading-relaxed">Palet warna lembut yang mudah dipadukan dengan berbagai pakaian harian.</p>
                 </div>
                 <div class="p-6">
                     <i class="fas fa-check-circle text-2xl text-brand-rose mb-3"></i>
@@ -80,10 +111,10 @@
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
             <div class="flex flex-col sm:flex-row justify-between items-end mb-12">
                 <div>
-                    <span class="uppercase tracking-widest text-xs font-semibold text-brand-rose block mb-2">Signature Collection</span>
+                    <span class="uppercase tracking-widest text-xs font-semibold text-brand-rose block mb-2">Koleksi Unggulan</span>
                     <h2 class="text-3xl font-serif text-brand-dark">Koleksi Terfavorit</h2>
                 </div>
-                <a href="katalog.html" class="text-xs uppercase tracking-widest text-brand-dark hover:text-brand-rose border-b border-brand-dark pb-1 mt-4 sm:mt-0">
+                <a href="katalog.html" class="text-xs uppercase tracking-widest text-brand-dark hover:text-brand-rose border-b border-brand-dark pb-1 mt-4 sm:mt-0 transition-colors">
                     Lihat Semua Katalog <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
@@ -98,21 +129,20 @@
     <script>
         initSharedLayout("home");
 
-        // Render 3 produk aktif di Homepage
         const featuredContainer = document.getElementById("featured-products");
         const activeProducts = PRODUCTS.filter(p => p.available).slice(0, 3);
 
         featuredContainer.innerHTML = activeProducts.map(p => `
-            <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
-                <div class="relative bg-[#f8f6f3] p-4 overflow-hidden">
-                    <img src="${p.image}" alt="${p.name}" class="w-full h-80 object-cover rounded-xl group-hover:scale-105 transition-transform duration-500">
+            <div class="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-shadow flex flex-col">
+                <div class="relative bg-[#f8f6f3] p-4">
+                    <img src="${p.image}" alt="${p.name}" class="w-full h-80 object-cover rounded-xl">
                     <span class="absolute top-6 left-6 bg-white/95 px-3.5 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase text-brand-dark shadow-sm">${p.badge}</span>
                 </div>
                 <div class="p-6 text-center flex flex-col flex-grow">
                     <h3 class="text-xl font-serif text-brand-dark mb-1">${p.name}</h3>
                     <p class="text-xs text-gray-400 font-light mb-4">${p.color}</p>
                     <p class="text-lg font-medium text-brand-dark mb-6 mt-auto">${formatter.format(p.price)}</p>
-                    <button onclick="addToCart('${p.id}')" class="w-full border border-brand-rose text-brand-dark py-2.5 rounded-full hover:bg-brand-rose hover:text-white transition-all text-xs font-semibold uppercase tracking-widest">
+                    <button onclick="addToCart('${p.id}')" class="w-full border border-brand-rose text-brand-dark py-2.5 rounded-full hover:bg-brand-rose hover:text-white transition-colors text-xs font-semibold uppercase tracking-widest">
                         Tambah ke Keranjang
                     </button>
                 </div>
