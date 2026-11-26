@@ -494,15 +494,15 @@ function initSharedLayout(activePage) {
         headerEl.innerHTML = `
         <header class="bg-white/90 backdrop-blur-md fixed w-full top-0 z-50 border-b border-brand-rose/20 shadow-[0_4px_30px_rgba(0,0,0,0.02)]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-20 gap-4">
+                <div class="relative flex justify-between items-center h-20 gap-4">
                     <div class="flex items-center lg:hidden">
                         <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-brand-dark hover:text-brand-rose p-1" aria-label="Buka Menu">
                             <i class="fas fa-bars text-xl"></i>
                         </button>
                     </div>
 
-                    <div class="flex-shrink-0">
-                        <a href="index.html" class="font-serif text-3xl tracking-wider text-brand-dark font-semibold whitespace-nowrap">FIRTAZA</a>
+                    <div class="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 flex-shrink-0">
+                        <a href="index.html" class="font-serif text-2xl sm:text-3xl tracking-wider text-brand-dark font-semibold whitespace-nowrap">FIRTAZA</a>
                     </div>
 
                     <nav class="hidden lg:flex lg:space-x-6 xl:space-x-8 items-center">
