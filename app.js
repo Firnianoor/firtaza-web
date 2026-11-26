@@ -82,7 +82,177 @@ const PRODUCTS = [
 ];
 
 // ==========================================
-// 2. SISTEM KERANJANG, VARIAN WARNA & VALIDASI CO
+// 2. SMOOTH PAGE TRANSITION (TRANSISI HALAMAN)
+// ==========================================
+let isNavigating = false;
+
+function initPageTransitions() {
+    if (!document.getElementById("firtaza-transition-style")) {
+        const style = document.createElement("style");
+        style.id = "firtaza-transition-style";
+        style.textContent = `
+            @view-transition {
+                navigation: auto;
+            }
+
+            @keyframes firtazaPageIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(12px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            main.firtaza-page-enter {
+                animation: firtazaPageIn 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            #firtaza-page-veil {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: #F4F0EA;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            #firtaza-page-veil.is-leaving {
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            #firtaza-page-veil .veil-brand {
+                font-family: 'Playfair Display', serif;
+                font-size: 1.5rem;
+                letter-spacing: 0.28em;
+                color: #4A423D;
+                opacity: 0;
+                transform: translateY(8px);
+                transition: opacity 0.26s ease, transform 0.26s ease;
+            }
+
+            #firtaza-page-veil .veil-line {
+                width: 36px;
+                height: 1.5px;
+                background: #D2BBA0;
+                margin-top: 10px;
+                transform: scaleX(0);
+                transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            #firtaza-page-veil.is-leaving .veil-brand {
+                opacity: 0.8;
+                transform: translateY(0);
+            }
+
+            #firtaza-page-veil.is-leaving .veil-line {
+                transform: scaleX(1);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                main.firtaza-page-enter {
+                    animation: none !important;
+                }
+                #firtaza-page-veil {
+                    display: none !important;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    if (!document.getElementById("firtaza-page-veil")) {
+        const veil = document.createElement("div");
+        veil.id = "firtaza-page-veil";
+        veil.setAttribute("aria-hidden", "true");
+        veil.innerHTML = `
+            <span class="veil-brand">FIRTAZA</span>
+            <span class="veil-line"></span>
+        `;
+        document.body.appendChild(veil);
+    }
+
+    const mainEl = document.querySelector("main");
+    if (mainEl) {
+        mainEl.classList.add("firtaza-page-enter");
+    }
+
+    // Tangkap klik tautan internal untuk transisi halus
+    document.addEventListener("click", (e) => {
+        if (e.defaultPrevented) return;
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+        const link = e.target.closest("a[href]");
+        if (!link) return;
+
+        const rawHref = link.getAttribute("href");
+        if (!rawHref || rawHref.startsWith("#") || rawHref.startsWith("mailto:") || rawHref.startsWith("tel:") || rawHref.startsWith("javascript:")) {
+            return;
+        }
+        if (link.target === "_blank" || link.hasAttribute("download")) return;
+
+        let targetUrl;
+        try {
+            targetUrl = new URL(link.href, window.location.href);
+        } catch {
+            return;
+        }
+
+        // Lewati jika mengarah ke situs luar (Instagram, WhatsApp, dll)
+        if (targetUrl.origin !== window.location.origin) return;
+
+        // Jika klik halaman yang sedang aktif, cukup scroll halus ke atas
+        if (targetUrl.pathname === window.location.pathname && !targetUrl.hash) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            const mobileMenu = document.getElementById("mobile-menu");
+            if (mobileMenu) mobileMenu.classList.add("hidden");
+            return;
+        }
+
+        e.preventDefault();
+        navigateWithTransition(targetUrl.href);
+    });
+
+    // Pastikan tirai hilang saat pengunjung menekan tombol Back/Forward browser
+    window.addEventListener("pageshow", () => {
+        isNavigating = false;
+        const veil = document.getElementById("firtaza-page-veil");
+        if (veil) veil.classList.remove("is-leaving");
+    });
+}
+
+function navigateWithTransition(url) {
+    if (isNavigating) return;
+
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const veil = document.getElementById("firtaza-page-veil");
+
+    if (prefersReduced || !veil) {
+        window.location.href = url;
+        return;
+    }
+
+    isNavigating = true;
+    const mobileMenu = document.getElementById("mobile-menu");
+    if (mobileMenu) mobileMenu.classList.add("hidden");
+
+    veil.classList.add("is-leaving");
+    setTimeout(() => {
+        window.location.href = url;
+    }, 260);
+}
+
+// ==========================================
+// 3. SISTEM KERANJANG, VARIAN WARNA & VALIDASI CO
 // ==========================================
 let cart = JSON.parse(localStorage.getItem("firtaza_cart")) || [];
 let isCartOpen = false;
@@ -107,7 +277,7 @@ function handleCartCheckout(e) {
         openEmptyCartModal();
         return;
     }
-    window.location.href = "checkout.html";
+    navigateWithTransition("checkout.html");
 }
 
 function openEmptyCartModal() {
@@ -220,7 +390,7 @@ function confirmProductSelection(goToCheckout) {
     closeProductModal();
 
     if (goToCheckout) {
-        window.location.href = "checkout.html";
+        navigateWithTransition("checkout.html");
     } else {
         if (!isCartOpen) toggleCart();
     }
@@ -310,9 +480,11 @@ function updateCartUI() {
 }
 
 // ==========================================
-// 3. RENDER NAVBAR, DRAWER, MODAL & FOOTER
+// 4. RENDER NAVBAR, DRAWER, MODAL & FOOTER
 // ==========================================
 function initSharedLayout(activePage) {
+    initPageTransitions();
+
     const navLinks = [
         { id: "home", label: "Beranda", href: "index.html" },
         { id: "katalog", label: "Katalog", href: "katalog.html" },
@@ -404,15 +576,15 @@ function initSharedLayout(activePage) {
                     </li>
                     <li class="flex gap-3">
                         <span class="w-6 h-6 rounded-full bg-brand-beige text-brand-dark font-semibold flex items-center justify-center flex-shrink-0">2</span>
-                        <span><strong>Isi Form Pengiriman:</strong> Lengkapi nama, email, nomor WhatsApp, dan alamat khusus area <strong>Kota Makassar</strong> (Flat Ongkir Rp 8.000).</span>
+                        <span><strong>Isi Data Pengiriman:</strong> Lengkapi nama, nomor WhatsApp, dan alamat khusus area <strong>Kota Makassar</strong> (Flat Ongkir Rp 8.000).</span>
                     </li>
                     <li class="flex gap-3">
                         <span class="w-6 h-6 rounded-full bg-brand-beige text-brand-dark font-semibold flex items-center justify-center flex-shrink-0">3</span>
-                        <span><strong>Kirim ke WhatsApp Admin:</strong> Klik tombol kirim untuk meneruskan rincian pesanan ke WA Admin (<strong>${FIRTAZA_CONFIG.whatsappDisplay}</strong>).</span>
+                        <span><strong>Lakukan Pembayaran:</strong> Pilih metode <strong>QRIS</strong> atau <strong>Transfer Bank</strong> di halaman Checkout, bayar sesuai total tagihan, lalu simpan bukti bayarnya.</span>
                     </li>
                     <li class="flex gap-3">
                         <span class="w-6 h-6 rounded-full bg-brand-beige text-brand-dark font-semibold flex items-center justify-center flex-shrink-0">4</span>
-                        <span><strong>Bayar & Pengiriman Same Day:</strong> Lakukan pembayaran sesuai arahan Admin lalu kirim bukti bayar. Pesanan diproses <em>Same Day</em> selama jam operasional.</span>
+                        <span><strong>Konfirmasi via WhatsApp:</strong> Klik tombol konfirmasi untuk mengirim rincian pesanan dan bukti bayar ke WA Admin (<strong>${FIRTAZA_CONFIG.whatsappDisplay}</strong>). Pesanan diproses <em>Same Day</em> selama jam operasional.</span>
                     </li>
                 </ol>
                 <button type="button" onclick="toggleHowToOrderModal()" class="w-full mt-6 bg-brand-dark text-white py-3 rounded-full text-xs uppercase tracking-widest font-semibold hover:bg-[#322d29] transition-colors">
